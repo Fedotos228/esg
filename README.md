@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Declarația ESG — Platformă de semnare colectivă
 
-## Getting Started
+Platformă web pentru semnarea colectivă a unei Declarații ESG în cadrul unui eveniment de business: participanții scanează un cod QR, semnează de pe telefon, iar semnatarii apar în timp real pe ecranul din sală.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Next.js 14+ (App Router) + TypeScript
+- Tailwind CSS + shadcn/ui
+- Supabase (PostgreSQL + Realtime)
+- `qrcode`, `react-hook-form` + `zod`, `papaparse` (export CSV)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Rute
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `/sign` — pagina publică de semnare (accesată din QR)
+- `/live-wall` — ecran fullscreen proiectat în sală, actualizat în timp real
+- `/admin` — dashboard protejat cu parolă (`ADMIN_PASSWORD`)
+- `/admin/qr` — generator + descărcare cod QR (PNG/SVG)
+- `POST /api/signatures` — salvare semnătură (rate limit 1 req/IP/10s)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Setup
 
-## Learn More
+1. Creează un proiect [Supabase](https://supabase.com).
+2. Rulează schema din `supabase/schema.sql` în SQL editor-ul Supabase (creează tabelele `signatures` și `declaration`, activează Realtime și RLS).
+3. Copiază `.env.example` în `.env.local` și completează valorile:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   cp .env.example .env.local
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — din Project Settings → API.
+   - `SUPABASE_SERVICE_ROLE_KEY` — folosit doar server-side (API routes admin/signatures), nu îl expune public.
+   - `NEXT_PUBLIC_APP_URL` — URL-ul de producție (folosit pentru generarea QR-ului).
+   - `ADMIN_PASSWORD` — parola pentru `/admin` și `/admin/qr`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. Instalează dependențele și pornește serverul de dezvoltare:
 
-## Deploy on Vercel
+   ```bash
+   npm install
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5. Editează textul declarației direct în tabelul `declaration` din Supabase (rândul cu `id = 1`).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Note
+
+- Rate limiting-ul de pe `/api/signatures` este in-memory per instanță — suficient pentru un singur eveniment, dar nu garantează limitarea globală pe un deploy serverless cu mai multe instanțe concurente.
+- `/live-wall` și `/admin*` au `robots: noindex`.
+
+## Deploy
+
+Conectează repo-ul la [Vercel](https://vercel.com/new) și adaugă variabilele de mediu de mai sus în setările proiectului.
