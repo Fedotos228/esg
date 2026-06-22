@@ -5,6 +5,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-brand-green: #8dc63f;
+  --color-brand-green-dark: #6ba52a;
+  --color-brand-blue: #1c75bc;
+  --color-brand-blue-dark: #145a91;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
@@ -127,4 +131,20 @@
   html {
     @apply font-sans;
   }
+}
+
+@keyframes counter-pulse {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-counter-pulse {
+  animation: counter-pulse 0.5s ease-out;
 }

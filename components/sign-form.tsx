@@ -1,17 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, Leaf } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   signatureSchema,
   type SignatureFormValues,
-} from "@/lib/validation/signature-schema";
+} from "@/lib/validation/signature-schema"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { CheckCircle2 } from "lucide-react"
+import Image from "next/image"
+import { useEffect, useState } from "react"
+import { Controller, useForm } from "react-hook-form"
 
 const SIGNED_FLAG_KEY = "esg-declaration-signed";
 
@@ -76,40 +77,85 @@ export function SignForm({ title, body, eventName }: SignFormProps) {
 
   if (alreadySigned) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 py-16 text-center">
-        <CheckCircle2 className="h-16 w-16 text-emerald-600" aria-hidden="true" />
+      <div className="relative flex flex-1 flex-col items-center justify-center gap-5 overflow-hidden px-6 py-16 text-center">
+        <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-brand-green/25 blur-3xl" />
+        <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-brand-blue/20 blur-3xl" />
+
+        <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-brand-green to-brand-blue shadow-lg shadow-brand-blue/20">
+          <CheckCircle2 className="h-10 w-10 text-white" aria-hidden="true" />
+        </div>
         <h1 className="text-2xl font-semibold text-neutral-900">
           Semnătura ta a fost înregistrată!
         </h1>
         {totalSignatures !== null && (
-          <p className="text-neutral-600">
-            Numărul curent de semnatari: <span className="font-semibold">{totalSignatures}</span>
+          <p className="rounded-full bg-neutral-100 px-4 py-1.5 text-sm text-neutral-700">
+            Numărul curent de semnatari:{" "}
+            <span className="font-semibold text-brand-blue">{totalSignatures}</span>
           </p>
         )}
         <p className="max-w-sm text-sm text-neutral-500">
           Îți mulțumim pentru implicare în susținerea Declarației ESG.
         </p>
+        <div className="mt-2 w-full max-w-md rounded-2xl border border-neutral-200 bg-white/70 p-4">
+          <p className="mb-2 text-[10px] font-semibold tracking-wider text-neutral-400 uppercase">
+            Cu sprijinul
+          </p>
+          <Image
+            src="/esg-logos-platforma.png"
+            alt="Parteneri"
+            width={2897}
+            height={322}
+            className="h-auto w-full"
+          />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-1 flex-col">
-      <header className="flex items-center gap-2 border-b border-neutral-200 bg-white px-4 py-4">
-        <Leaf className="h-5 w-5 text-emerald-600" aria-hidden="true" />
-        <span className="text-sm font-medium text-neutral-700">
-          {eventName ?? "Declarație ESG"}
-        </span>
+    <div className="flex flex-1 flex-col bg-gradient-to-b from-brand-green/5 via-white to-brand-blue/5">
+      <header className="sticky top-0 z-10 flex flex-col gap-1.5 border-b border-neutral-200/80 bg-white/80 px-4 py-4 backdrop-blur-md">
+        <Image
+          src="/esg-title-platforma.png"
+          alt="ESG pentru afaceri puternice"
+          width={300}
+          height={32}
+          className="h-5 w-fit"
+          priority
+        />
+        {eventName && (
+          <span className="text-xs font-medium text-neutral-500">{eventName}</span>
+        )}
       </header>
 
       <div className="flex-1 overflow-y-auto px-4 py-6">
-        <h1 className="mb-3 text-xl font-semibold text-neutral-900">{title}</h1>
-        <p className="whitespace-pre-wrap text-sm leading-relaxed text-neutral-700">{body}</p>
+        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+          <div className="h-1.5 w-full bg-gradient-to-r from-brand-green to-brand-blue" />
+          <div className="p-5">
+            <h1 className="mb-3 text-xl font-semibold text-neutral-900">{title}</h1>
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-neutral-700">
+              {body}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6 rounded-2xl border border-neutral-200 bg-white/70 p-4">
+          <p className="mb-2 text-[10px] font-semibold tracking-wider text-neutral-400 uppercase">
+            Cu sprijinul
+          </p>
+          <Image
+            src="/esg-logos-platforma.png"
+            alt="Parteneri"
+            width={2897}
+            height={322}
+            className="h-auto w-full"
+          />
+        </div>
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="sticky bottom-0 flex flex-col gap-4 border-t border-neutral-200 bg-white px-4 py-5 shadow-[0_-4px_12px_rgba(0,0,0,0.04)]"
+        className="sticky bottom-0 flex flex-col gap-4 rounded-t-3xl border-t border-neutral-200 bg-white/95 px-4 py-5 shadow-[0_-8px_24px_rgba(0,0,0,0.06)] backdrop-blur-md"
       >
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="full_name">Nume complet</Label>
@@ -191,7 +237,11 @@ export function SignForm({ title, body, eventName }: SignFormProps) {
 
         {submitError && <p className="text-sm text-red-600">{submitError}</p>}
 
-        <Button type="submit" disabled={isSubmitting} className="bg-emerald-600 hover:bg-emerald-700">
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="bg-gradient-to-r from-brand-green to-brand-blue text-white shadow-md shadow-brand-blue/20 transition-transform hover:scale-[1.01] hover:from-brand-green hover:to-brand-blue active:scale-[0.99]"
+        >
           {isSubmitting ? "Se trimite..." : "Semnează Declarația"}
         </Button>
       </form>

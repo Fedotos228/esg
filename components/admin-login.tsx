@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,9 +38,22 @@ export function AdminLogin() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-neutral-50 px-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-b from-brand-blue/5 via-white to-brand-green/5 px-4">
+      <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-brand-green/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-brand-blue/20 blur-3xl" />
+
+      <Card className="relative w-full max-w-sm border-neutral-200 shadow-xl shadow-neutral-200/50">
+        <CardHeader className="items-center text-center">
+          <Image
+            src="/esg-title-platforma.png"
+            alt="ESG pentru afaceri puternice"
+            width={2400}
+            height={303}
+            className="mb-3 h-6 w-auto"
+          />
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-brand-green to-brand-blue">
+            <ShieldCheck className="h-6 w-6 text-white" aria-hidden="true" />
+          </div>
           <CardTitle>Acces administrare</CardTitle>
         </CardHeader>
         <CardContent>
@@ -55,7 +70,11 @@ export function AdminLogin() {
               />
             </div>
             {error && <p className="text-sm text-red-600">{error}</p>}
-            <Button type="submit" disabled={loading}>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="bg-gradient-to-r from-brand-green to-brand-blue text-white shadow-md shadow-brand-blue/20 hover:from-brand-green hover:to-brand-blue"
+            >
               {loading ? "Se verifică..." : "Autentificare"}
             </Button>
           </form>

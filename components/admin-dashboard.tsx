@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Papa from "papaparse";
@@ -83,14 +84,24 @@ export function AdminDashboard({ signatures }: AdminDashboardProps) {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-50 px-4 py-8 sm:px-8">
+    <main className="min-h-screen bg-gradient-to-b from-neutral-50 to-white px-4 py-8 sm:px-8">
       <div className="mx-auto max-w-5xl">
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold text-neutral-900">Administrare semnături</h1>
-            <p className="text-sm text-neutral-500">
-              <Badge variant="secondary">{signatures.length} semnatari</Badge>
-            </p>
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-neutral-200 bg-white px-5 py-4 shadow-sm">
+          <div className="flex items-center gap-4">
+            <Image
+              src="/esg-title-platforma.png"
+              alt="ESG pentru afaceri puternice"
+              width={2400}
+              height={303}
+              className="h-6 w-auto"
+            />
+            <div className="h-8 w-px bg-neutral-200" />
+            <div>
+              <h1 className="text-xl font-semibold text-neutral-900">Administrare semnături</h1>
+              <Badge className="mt-1 bg-gradient-to-r from-brand-green to-brand-blue text-white">
+                {signatures.length} semnatari
+              </Badge>
+            </div>
           </div>
           <div className="flex flex-wrap gap-2">
             <Button
@@ -148,7 +159,7 @@ export function AdminDashboard({ signatures }: AdminDashboardProps) {
           </div>
         </div>
 
-        <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-white">
+        <div className="overflow-x-auto rounded-2xl border border-neutral-200 bg-white shadow-sm">
           <Table>
             <TableHeader>
               <TableRow>
