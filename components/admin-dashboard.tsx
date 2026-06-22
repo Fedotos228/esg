@@ -93,13 +93,19 @@ export function AdminDashboard({ signatures }: AdminDashboardProps) {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button variant="outline" render={<Link href="/live-wall">Live Wall</Link>} />
             <Button
               variant="outline"
+              nativeButton={false}
+              render={<Link href="/live-wall">Live Wall</Link>}
+            />
+            <Button
+              variant="outline"
+              nativeButton={false}
               render={<Link href="/sign">Pagina de semnare</Link>}
             />
             <Button
               variant="outline"
+              nativeButton={false}
               render={<Link href="/admin/qr">Generator QR</Link>}
             />
             <Button variant="ghost" onClick={handleLogout}>

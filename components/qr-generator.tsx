@@ -44,6 +44,7 @@ export function QrGenerator({ signUrl }: QrGeneratorProps) {
         <Button
           variant="ghost"
           className="mb-2"
+          nativeButton={false}
           render={<Link href="/admin">← Înapoi la administrare</Link>}
         />
         <Card>
